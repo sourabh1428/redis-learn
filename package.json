@@ -2,7 +2,7 @@
   "name": "resend",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -12,14 +12,20 @@
   "dependencies": {
     "@mailchimp/mailchimp_marketing": "^3.0.80",
     "@trycourier/courier": "^6.2.1",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
     "courier": "^1.0.1",
     "express": "^4.19.2",
     "ioredis": "^5.4.1",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.8.0",
+    "mongoose": "^8.5.4",
+    "mongosh": "^2.3.0",
     "nodemon": "^3.1.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "redis": "^4.7.0",
-    "resend": "^4.0.0",
+    "resend": "file:",
     "twilio": "^5.2.2"
   },
   "devDependencies": {

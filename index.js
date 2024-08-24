@@ -1,51 +1,52 @@
-import { createClient } from 'redis';
+// index.js
+const express = require('express');
+const cors = require('cors'); // Import cors package
+const router = express.Router();
 
-async function fetchAndPrintData() {
-  const client = createClient({ url: 'redis://localhost:6379' });
+const app = express();
+const authRoute = require('./routes/Auth.js');
+const validateApiKey = require('./routes/DBauth.js');
 
-  client.on('error', (err) => console.log('Redis Client Error', err));
 
-  await client.connect();
+const port = 3000;
 
-  try {
-    // Fetch all keys
-    const keys = await client.keys('*');
 
-    for (const key of keys) {
-      const type = await client.type(key);
 
-      console.log(`Key: ${key}, Type: ${type}`);
+app.use(cors());
+app.use(express.json());
+// Import routes
 
-      let value;
 
-      switch (type) {
-        case 'string':
-          value = await client.get(key);
-          break;
-        case 'list':
-          value = await client.lRange(key, 0, -1);  // Note the use of lRange instead of lrange
-          break;
-        case 'set':
-          value = await client.sMembers(key);  // Note the use of sMembers instead of smembers
-          break;
-        case 'hash':
-          value = await client.hGetAll(key);  // Note the use of hGetAll instead of hgetall
-          break;
-        case 'zset':
-          value = await client.zRange(key, 0, -1, { WITHSCORES: true });  // Note the use of zRange instead of zrange
-          break;
-        default:
-          console.log(`Unhandled key type: ${type}`);
-          continue;
-      }
 
-      console.log(`Value for key ${key}:`, value);
-    }
-  } catch (err) {
-    console.error('Error fetching data from Redis:', err);
-  } finally {
-    await client.disconnect();
-  }
-}
 
-fetchAndPrintData();
+const routes = require('./routes/users.js');
+
+const eventRoutes=require('./routes/events.js');
+
+const campaignRoutes = require('./routes/campaign.js');
+const { validate } = require('./Modal.js');
+
+
+
+// Use routes
+
+
+app.use('/auth', validateApiKey,authRoute);
+app.use('/',validateApiKey,routes);
+app.use('/events',validateApiKey, eventRoutes);
+app.use('/campaigns',validateApiKey ,campaignRoutes);
+app.use('/auth',validateApiKey,authRoute );
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
+
+
+
+
+
+
+
+// import redis
+
+
+
